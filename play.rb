@@ -1,9 +1,10 @@
-def initialize      
-    class Hangman
-    # convert to an array
+class Hangman
+    def initialize      
+        # convert to an array
         # once you make a guess, we want to remove that letter from the available letters to guess from
-        letters =('a'..'z').to_a
-        word = words.sample
+        # instance variable allows you to use it within different methods within the class
+        @letters =('a'..'z').to_a
+        @word = words.sample
     end
 
     def words
@@ -18,7 +19,8 @@ def initialize
     end
     
     def begin
-    
+        # ask user for a letter
+        puts 'New game started... your clue is #{}'
     
     end
 end

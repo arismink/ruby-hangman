@@ -7,7 +7,7 @@ class Hangman
         @word = words.sample
         @lives = 7
         @correct_guesses = []
-        @word_teaser = ''
+        @word_teaser = ""
         # run this block of code (do) number of times equal to the length of the first word
         @word.first.size.times do
             @word_teaser += "_ "
@@ -25,19 +25,40 @@ class Hangman
         ]
     end
 
-    def print_teaser last_guess
-    
-        word_teaser = ""
+    # nil default value for last_guess
+    def print_teaser last_guess = nil
         
         # we only want to call this method if the last_guess is not nil
-        update_teaser unless last_guess.nil?
+        update_teaser(last_guess) unless last_guess.nil?
 
-        puts word_teaser
+        puts @word_teaser
+    end
+
+    def update_teaser last_guess
+        # each item in the array will be underscores once the script is ran for the first time
+        new_teaser = @word_teaser.split
+        
+        new_teaser.each_with_index do |letter, index|
+            
+            #replace blank values with letter if it matches with letter in word being guessed
+
+            # checking to see if letter array is _ and if the word (that is split into an array) letter at that index is equal to the last guess
+            if letter == '_' && @word.first[index] === last_guess
+                
+                #if there is a match, update the underscore value with the letter if it matched at the right position
+                new_teaser[index] = last_guess
+            end
+        end
+
+        # overrite word_teaser value with the new updated string with the found letters
+        @word_teaser = new_teaser.join(' ')
     end
 
     def make_guess
         if @lives > 0
             puts "Enter a letter"
+
+            # create a new variable to capture the user inputted value (gets) and to remove the line break, you use (chomp)
             guess = gets.chomp
             
             # if letter is not part of word, then remove from letters array
@@ -53,7 +74,7 @@ class Hangman
                 # it will delete guess from the letters array
                 @letters.delete guess
 
-                print_teaser
+                print_teaser guess
                 make_guess
             else
                 # if guess is wrong, remove number of lives
@@ -73,11 +94,6 @@ class Hangman
 
         puts "Clue: #{@word.last}"
         make_guess
-
-        # create a new variable to capture the user inputted value (gets) and to remove the line break, you use (chomp)
-        guess = gets.chomp
-
-        puts "You guessed #{guess}"
     end
 end
 

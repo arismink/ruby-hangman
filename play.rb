@@ -17,10 +17,32 @@ class Hangman
             
         ]
     end
+
+    def print_teaser
+    
+        word_teaser = ""
+    
+        # run this block of code (do) number of times equal to the length of the first word
+        @word.first.size.times do
+            word_teaser += "_ "
+        end
+
+        puts word_teaser
+    end
     
     def begin
         # ask user for a letter
-        puts 'New game started... your clue is #{}'
-    
+        puts "New game started... your word is #{@word.first.size} characters long"
+        print_teaser
+        
+        puts "Clue: #{@word.last}"
+        puts "Enter a letter:"
+        # create a new variable to capture the user inputted value (gets) and to remove the line break, you use (chomp)
+        guess = gets.chomp
+
+        puts "You guessed #{guess}"
     end
 end
+
+game = Hangman.new
+game.begin

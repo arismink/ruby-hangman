@@ -5,8 +5,15 @@ class Hangman
         # instance variable allows you to use it within different methods within the class
         @letters =('a'..'z').to_a
         @word = words.sample
+        @lives = 7
+        @correct_guesses = []
+        @word_teaser = ''
+        # run this block of code (do) number of times equal to the length of the first word
+        @word.first.size.times do
+            @word_teaser += "_ "
+        end
     end
-
+    
     def words
         [
                ['cricket', 'a game play by gentlemen'],
@@ -18,29 +25,44 @@ class Hangman
         ]
     end
 
-    def print_teaser
+    def print_teaser last_guess
     
         word_teaser = ""
-    
-        # run this block of code (do) number of times equal to the length of the first word
-        @word.first.size.times do
-            word_teaser += "_ "
-        end
+        
+        # we only want to call this method if the last_guess is not nil
+        update_teaser unless last_guess.nil?
 
         puts word_teaser
     end
 
     def make_guess
-        puts "Enter a letter"
-        guess = gets.chomp
-        
-        # if letter is not part of word, then remove from letters array
-        good_guess = @word.first.include? guess
+        if @lives > 0
+            puts "Enter a letter"
+            guess = gets.chomp
+            
+            # if letter is not part of word, then remove from letters array
+            good_guess = @word.first.include? guess
 
-        if good_guess
-            puts "good guess!"
+            if good_guess
+                puts "good guess!"
+
+                # store guesses in the array
+                @correct_guesses << guess
+
+                # remove correct guess from alphabet
+                # it will delete guess from the letters array
+                @letters.delete guess
+
+                print_teaser
+                make_guess
+            else
+                # if guess is wrong, remove number of lives
+                @lives -= 1
+                puts "sorry... you have #{@lives} guesses left. try again!"
+                make_guess
+            end
         else
-            puts "sorry... try again"
+            puts "game over! better luck next time!"
         end
     end
     
@@ -50,7 +72,8 @@ class Hangman
         print_teaser
 
         puts "Clue: #{@word.last}"
-        puts "Enter a letter:"
+        make_guess
+
         # create a new variable to capture the user inputted value (gets) and to remove the line break, you use (chomp)
         guess = gets.chomp
 

@@ -3,10 +3,8 @@ class Hangman
         # convert to an array
         # once you make a guess, we want to remove that letter from the available letters to guess from
         # instance variable allows you to use it within different methods within the class
-        @letters =('a'..'z').to_a
         @word = words.sample
         @lives = 7
-        @correct_guesses = []
         @word_teaser = ""
         # run this block of code (do) number of times equal to the length of the first word
         @word.first.size.times do
@@ -64,18 +62,24 @@ class Hangman
             # if letter is not part of word, then remove from letters array
             good_guess = @word.first.include? guess
 
-            if good_guess
+            # check what user input
+            if guess == 'exit'
+                puts "thank you for playing!"
+                
+            elsif guess.length > 1
+                puts "only 1 letter at a time please!"
+                make_guess
+
+            elsif good_guess
                 puts "good guess!"
 
-                # store guesses in the array
-                @correct_guesses << guess
-
-                # remove correct guess from alphabet
-                # it will delete guess from the letters array
-                @letters.delete guess
-
                 print_teaser guess
-                make_guess
+
+                if @word.first == @word_teaser.split.join
+                    puts "yay! you won!"
+                else
+                    make_guess
+                end
             else
                 # if guess is wrong, remove number of lives
                 @lives -= 1
@@ -90,6 +94,7 @@ class Hangman
     def begin
         # ask user for a letter
         puts "New game started... your word is #{@word.first.size} characters long"
+        puts "to exit game at any point, type 'exit'"
         print_teaser
 
         puts "Clue: #{@word.last}"

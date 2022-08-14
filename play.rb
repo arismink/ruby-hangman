@@ -29,12 +29,26 @@ class Hangman
 
         puts word_teaser
     end
+
+    def make_guess
+        puts "Enter a letter"
+        guess = gets.chomp
+        
+        # if letter is not part of word, then remove from letters array
+        good_guess = @word.first.include? guess
+
+        if good_guess
+            puts "good guess!"
+        else
+            puts "sorry... try again"
+        end
+    end
     
     def begin
         # ask user for a letter
         puts "New game started... your word is #{@word.first.size} characters long"
         print_teaser
-        
+
         puts "Clue: #{@word.last}"
         puts "Enter a letter:"
         # create a new variable to capture the user inputted value (gets) and to remove the line break, you use (chomp)
